@@ -1,0 +1,12 @@
+/vendor/*
+/.vendor/*
+/.vscode/*
+
+trace.out
+/doc/logic.pu
+debug
+debug.test
+*.log
+*.pprof
+
+audigo.exe

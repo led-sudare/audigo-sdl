@@ -1,0 +1,12 @@
+[Unit]
+Description=Audigo service
+After=local-fs.target
+ConditionPathExists=/home/pi/go/src/github.com/code560/audigo
+
+[Service]
+ExecStart=/opt/audigo/bin/audigo.sh
+Restart=no
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
