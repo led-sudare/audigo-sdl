@@ -10,7 +10,7 @@ var (
 )
 
 func init() {
-	// initPool()
+	initPool()
 }
 
 func NewProxy() Proxy {
