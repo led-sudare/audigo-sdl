@@ -5,7 +5,11 @@ type internalPlayer struct {
 }
 
 func NewInternalPlayer() Player {
-	p := &internalPlayer{}
+	p := &internalPlayer{
+		mixPlayer: mixPlayer{
+			player: GetSdlPlayer(),
+		},
+	}
 	return p
 }
 

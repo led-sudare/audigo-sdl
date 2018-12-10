@@ -15,8 +15,8 @@ type Player interface {
 type implPlayer interface {
 	Player
 
-	setCtrlFactory(func() *ctrler)
-	setVolumeFactory(func() *effects.Volume)
+	// setCtrlFactory(func() *ctrler)
+	// setVolumeFactory(func() *effects.Volume)
 }
 
 type PlayArgs struct {
