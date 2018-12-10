@@ -1,7 +1,7 @@
 package player
 
 type internalPlayer struct {
-	simplePlayer
+	mixPlayer
 }
 
 func NewInternalPlayer() Player {
@@ -12,5 +12,5 @@ func NewInternalPlayer() Player {
 func (p *internalPlayer) Play(args *PlayArgs) {
 	args.Src = dir + args.Src
 	log.Debugf("play file: %s", args.Src)
-	p.simplePlayer.Play(args)
+	p.mixPlayer.Play(args)
 }

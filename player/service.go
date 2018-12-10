@@ -5,17 +5,17 @@ import (
 )
 
 var (
-	playerPool sync.Pool
-	proxyPool  sync.Pool
+	// playerPool sync.Pool
+	proxyPool sync.Pool
 )
 
 func init() {
-	initPool()
+	// initPool()
 }
 
 func NewProxy() Proxy {
 	proxy := proxyPool.Get().(*simpleProxy)
-	proxy.playerPool = &playerPool
+	// proxy.playerPool = &playerPool
 	return proxy
 }
 
@@ -24,15 +24,15 @@ func CloseProxy(p Proxy) {
 }
 
 func ClosePlayer(p Player) {
-	playerPool.Put(p)
+	// playerPool.Put(p)
 }
 
 func initPool() {
-	playerPool = sync.Pool{
-		New: func() interface{} {
-			return newSimplePlayer() // todo trans internal
-		},
-	}
+	// playerPool = sync.Pool{
+	// 	New: func() interface{} {
+	// 		return newSimplePlayer() // todo trans internal
+	// 	},
+	// }
 
 	proxyPool = sync.Pool{
 		New: func() interface{} {

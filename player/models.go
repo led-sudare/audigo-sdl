@@ -1,6 +1,7 @@
 package player
 
 import (
+	"github.com/code560/audigo-sdl/util"
 	"github.com/faiface/beep/effects"
 )
 
@@ -22,7 +23,7 @@ type implPlayer interface {
 type PlayArgs struct {
 	Src  string `json:"src"`
 	Loop bool   `json:"loop"`
-	Stop bool   `json:"stop"`
+	// Stop bool   `json:"stop"`
 }
 
 type VolumeArgs struct {
@@ -56,3 +57,7 @@ const (
 type ctrler struct {
 	Paused bool
 }
+
+var (
+	log = util.GetLogger()
+)

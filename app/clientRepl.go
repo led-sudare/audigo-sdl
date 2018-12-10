@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/code560/audigo/player"
-	"golang.org/x/crypto/ssh/terminal"
 )
 
 type clientRepl struct {
@@ -23,12 +22,12 @@ func ClientRepl(domain string, id string) {
 	}
 	c.printInit()
 
-	// pipeline
-	if terminal.IsTerminal(0) {
-		src, _ := ioutil.ReadAll(os.Stdin)
-		c.play(string(src))
-		return
-	}
+	// // pipeline
+	// if terminal.IsTerminal(0) {
+	// 	src, _ := ioutil.ReadAll(os.Stdin)
+	// 	c.play(string(src))
+	// 	return
+	// }
 
 	// wait input
 	c.cli()

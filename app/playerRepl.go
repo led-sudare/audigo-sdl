@@ -3,12 +3,9 @@ package app
 import (
 	"bufio"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"strconv"
 	"strings"
-
-	"golang.org/x/crypto/ssh/terminal"
 
 	"github.com/code560/audigo/player"
 	"github.com/code560/audigo/util"
@@ -28,11 +25,11 @@ func Repl() {
 	c.printInit()
 
 	// pipeline
-	if terminal.IsTerminal(0) {
-		src, _ := ioutil.ReadAll(os.Stdin)
-		c.play(string(src))
-		return
-	}
+	// if terminal.IsTerminal(0) {
+	// 	src, _ := ioutil.ReadAll(os.Stdin)
+	// 	c.play(string(src))
+	// 	return
+	// }
 
 	// wait input
 	c.cli()

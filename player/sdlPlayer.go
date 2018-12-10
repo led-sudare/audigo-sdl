@@ -1,7 +1,6 @@
 package player
 
 import (
-	"log"
 	"sync"
 
 	"github.com/veandco/go-sdl2/mix"
@@ -19,27 +18,25 @@ const (
 	SDL_INVALID_CH = -2
 )
 
-type Player interface {
+type sdlPlayer interface {
 	Close()
-	Play(file string)
+	Play(file string, loop int)
 	Stop()
 	Volume(vol int)
 }
 
-func GetPlayer(contentId_ string) Player {
-	return &implPlayer{
-		contentId: contentId_,
-		channels:  make(map[int]bool, SDL_CHANNELS),
-		sdl:       getInstance(),
-		statVol:   128,
+func GetSdlPlayer() sdlPlayer {
+	return &sdlController{
+		channels: make(map[int]bool, SDL_CHANNELS),
+		sdl:      getInstance(),
+		statVol:  128,
 	}
 }
 
 // implPlayer
 
-type implPlayer struct {
-	contentId string
-	sdl       *sdlPlayer
+type sdlController struct {
+	sdl *sdlWrapper
 
 	channels  map[int]bool
 	chanMutex sync.Mutex
@@ -48,40 +45,40 @@ type implPlayer struct {
 	statVol int
 }
 
-func (i *implPlayer) Close() {
+func (i *sdlController) Close() {
 	i.sdl.close()
 }
 
-func (i *implPlayer) Play(file string) {
+func (i *sdlController) Play(file string, loop int) {
 	close := make(closing)
-	ch := i.sdl.play(file, i.statVol, close)
+	ch := i.sdl.play(file, loop, i.statVol, close)
 
 	i.chanMutex.Lock()
 	i.channels[ch] = true
-	log.Printf("[%s] play ch: %d", i.contentId, ch)
+	log.Debugf("play ch: %d", ch)
 	i.chanMutex.Unlock()
 	select {
 	case <-close: // blocking
 		i.chanMutex.Lock()
 		delete(i.channels, ch)
-		log.Printf("[%s] close ch: %d", i.contentId, ch)
+		log.Debugf("close ch: %d", ch)
 		i.chanMutex.Unlock()
 		break
 	}
 }
 
-func (i *implPlayer) Stop() {
+func (i *sdlController) Stop() {
 	i.chanMutex.Lock()
 	for ch, enable := range i.channels {
 		if enable {
 			mix.HaltChannel(ch)
-			log.Printf("[%s] stop ch: %d", i.contentId, ch)
+			log.Debugf("stop ch: %d", ch)
 		}
 	}
 	i.chanMutex.Unlock()
 }
 
-func (i *implPlayer) Volume(vol int) {
+func (i *sdlController) Volume(vol int) {
 	if !validVolume(vol) {
 		return
 	}
@@ -91,7 +88,7 @@ func (i *implPlayer) Volume(vol int) {
 	for ch, enable := range i.channels {
 		if enable {
 			i.sdl.volume(ch, vol)
-			log.Printf("[%s] set volume: %d -> %d", i.contentId, ch, vol)
+			log.Debugf("set volume: %d -> %d", ch, vol)
 		}
 	}
 	i.chanMutex.Unlock()
@@ -106,27 +103,27 @@ func validVolume(vol int) bool {
 	return true
 }
 
-// sdlPlayer
+// sdlWrapper
 
-func getInstance() *sdlPlayer {
-	return instance_player
+func getInstance() *sdlWrapper {
+	return instanceSdl
 }
 
-var instance_player *sdlPlayer = newSdlPlayer()
+var instanceSdl *sdlWrapper = newSdlWrapper()
 
-type sdlPlayer struct {
+type sdlWrapper struct {
 	finishes    map[int]closing
 	finishMutex sync.Mutex
 }
 
-func newSdlPlayer() *sdlPlayer {
-	p := &sdlPlayer{}
+func newSdlWrapper() *sdlWrapper {
+	p := &sdlWrapper{}
 	p.finishes = make(map[int]closing, SDL_CHANNELS)
 	p.init()
 	return p
 }
 
-func (p *sdlPlayer) init() {
+func (p *sdlWrapper) init() {
 	err := mix.Init(0)
 	if err != nil {
 		log.Fatal(err)
@@ -134,7 +131,7 @@ func (p *sdlPlayer) init() {
 	p.open()
 }
 
-func (p *sdlPlayer) open() {
+func (p *sdlWrapper) open() {
 	err := mix.OpenAudio(SDL_SAMPLE_RATE,
 		mix.DEFAULT_FORMAT, SDL_CH, SDL_BUFFER)
 	if err != nil {
@@ -157,21 +154,21 @@ func (p *sdlPlayer) open() {
 	})
 }
 
-func (p *sdlPlayer) close() {
+func (p *sdlWrapper) close() {
 	mix.CloseAudio()
 	mix.Quit()
 }
 
-func (p *sdlPlayer) play(file string, vol int, close closing) int {
+func (p *sdlWrapper) play(file string, loop int, vol int, close closing) int {
 	chunk := p.load(file)
 	if chunk == nil {
 		return SDL_INVALID_CH
 	}
 	chunk.Volume(vol)
 
-	ch, err := chunk.Play(-1, 0)
+	ch, err := chunk.Play(-1, loop)
 	if err != nil {
-		log.Print(err)
+		log.Error(err)
 		return SDL_INVALID_CH
 	}
 	p.finishMutex.Lock()
@@ -180,7 +177,7 @@ func (p *sdlPlayer) play(file string, vol int, close closing) int {
 	return ch
 }
 
-func (p *sdlPlayer) volume(ch int, vol int) {
+func (p *sdlWrapper) volume(ch int, vol int) {
 	p.finishMutex.Lock()
 	if _, ok := p.finishes[ch]; ok {
 		mix.Volume(ch, vol)
@@ -188,10 +185,10 @@ func (p *sdlPlayer) volume(ch int, vol int) {
 	p.finishMutex.Unlock()
 }
 
-func (p *sdlPlayer) load(file string) *mix.Chunk {
+func (p *sdlWrapper) load(file string) *mix.Chunk {
 	chunk, err := mix.LoadWAV(file)
 	if err != nil {
-		log.Print(err)
+		log.Error(err)
 		return nil
 	}
 	return chunk

@@ -9,4 +9,5 @@ debug.test
 *.log
 *.pprof
 
-audigo.exe
+*.exe
+
