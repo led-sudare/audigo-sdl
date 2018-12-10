@@ -2,7 +2,6 @@ package player
 
 import (
 	"github.com/code560/audigo-sdl/util"
-	"github.com/faiface/beep/effects"
 )
 
 type Player interface {

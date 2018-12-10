@@ -182,12 +182,10 @@ audigo
 # 🎤 THIRD PARTY
 
 Use libs
-* [faiface/beep](https://github.com/faiface/beep)
 * [gin-gonic/gin](https://github.com/gin-gonic/gin)
-* [hajimehoshi/oto](https://github.com/hajimehoshi/oto)
 * [urfave/cli](https://github.com/urfave/cli)
 * [go.uber.org/zap](https://github.com/uber-go/zap)
-* [golang.org/x/crypto](https://github.com/golang/crypto/)
+* [veandco/go-sdl2](https://github.com/veandco/go-sdl2)
 
 
 音声ファイルを使用させていただいております。
