@@ -7,8 +7,8 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/code560/audigo/player"
-	"github.com/code560/audigo/util"
+	"github.com/code560/audigo-sdl/player"
+	"github.com/code560/audigo-sdl/util"
 	"github.com/gin-gonic/gin"
 )
 

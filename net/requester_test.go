@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/code560/audigo/player"
+	"github.com/code560/audigo-sdl/player"
 )
 
 func TestRequest(t *testing.T) {

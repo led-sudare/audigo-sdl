@@ -1,7 +1,7 @@
 [Unit]
 Description=Audigo service
 After=local-fs.target
-ConditionPathExists=/home/pi/go/src/github.com/code560/audigo
+ConditionPathExists=/home/pi/go/src/github.com/code560/audigo-sdl
 
 [Service]
 ExecStart=/opt/audigo/bin/audigo.sh

@@ -1,8 +1,8 @@
 package app
 
 import (
-	"github.com/code560/audigo/net"
-	"github.com/code560/audigo/player"
+	"github.com/code560/audigo-sdl/net"
+	"github.com/code560/audigo-sdl/player"
 )
 
 type voice int

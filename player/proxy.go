@@ -3,7 +3,7 @@ package player
 import (
 	"sync"
 
-	"github.com/code560/audigo/util"
+	"github.com/code560/audigo-sdl/util"
 )
 
 const (

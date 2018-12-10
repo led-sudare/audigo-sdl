@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/code560/audigo/player"
+	"github.com/code560/audigo-sdl/player"
 )
 
 type clientRepl struct {

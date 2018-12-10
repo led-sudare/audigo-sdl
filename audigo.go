@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
-	"github.com/code560/audigo/app"
-	"github.com/code560/audigo/util"
+	"github.com/code560/audigo-sdl/app"
+	"github.com/code560/audigo-sdl/util"
 	"github.com/urfave/cli"
 )
 
