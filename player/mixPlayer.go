@@ -1,6 +1,18 @@
 package player
 
-import "os"
+import (
+	"math"
+	"os"
+
+	"github.com/code560/audigo-sdl/util"
+)
+
+const (
+	SDL_INPUT_VOLUME_MIN  = 0.0
+	SDL_INPUT_VOLUME_MAX  = 1.0
+	SDL_OUTPUT_VOLUME_MIN = 0.0
+	SDL_OUTPUT_VOLUME_MAX = 128.0
+)
 
 func newMixPlayer() Player {
 	p := &mixPlayer{
@@ -33,16 +45,10 @@ func (m *mixPlayer) Stop() {
 }
 
 func (m *mixPlayer) Volume(args *VolumeArgs) {
-	vol := (int)(args.Vol * 10)
+	volf := util.LinearTransF(float64(args.Vol),
+		SDL_INPUT_VOLUME_MIN, SDL_INPUT_VOLUME_MAX,
+		SDL_OUTPUT_VOLUME_MIN, SDL_OUTPUT_VOLUME_MAX)
+	vol := int(math.Ceil(volf))
+	log.Debugf("change vol unit: %f -> %d", args.Vol, vol)
 	m.player.Volume(vol)
-}
-
-func (m *mixPlayer) Pause() {
-	// nothing
-	log.Warn("dont support.")
-}
-
-func (m *mixPlayer) Resume() {
-	// nothing
-	log.Warn("dont support.")
 }

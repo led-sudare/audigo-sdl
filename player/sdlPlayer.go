@@ -16,6 +16,8 @@ const (
 	SDL_CHANNELS = 50
 
 	SDL_INVALID_CH = -2
+	SDL_VOL_MIN    = 0
+	SDL_VOL_MAX    = 128
 )
 
 type sdlPlayer interface {
@@ -95,9 +97,9 @@ func (i *sdlController) Volume(vol int) {
 }
 
 func validVolume(vol int) bool {
-	if vol < 0 {
+	if vol < SDL_VOL_MIN {
 		return false
-	} else if vol > 128 {
+	} else if vol > SDL_VOL_MAX {
 		return false
 	}
 	return true
