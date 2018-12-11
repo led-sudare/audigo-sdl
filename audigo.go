@@ -18,7 +18,7 @@ func main() {
 	cl := cli.NewApp()
 	cl.Name = "audigo"
 	cl.Usage = "Audio service by LED CUBU"
-	cl.Version = "1.0.0"
+	cl.Version = "1.0.1"
 
 	cl.Flags = []cli.Flag{
 		cli.StringFlag{
