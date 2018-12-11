@@ -1,5 +1,5 @@
 ﻿# audigo
-3D Led CubeのPCレス(Raspberry pi)音響サービス  
+3D Led CubeのPCレス(Raspberry pi)音響サービス(SDL版)  
 
 <!-- toc -->  
 * [💊 Requirements](#-requirements)
@@ -14,17 +14,23 @@
 ## 💊 Requirements
 
 **ALL**  
-* git
-* dep
+* git  
+* dep 
     ```sh
     $ go get -u github.com/golang/dep/cmd/dep
     ```
-* Go 1.11 or later
+* Go 1.11 or later  
 
+see https://github.com/veandco/go-sdl2  
+  
 **Linux**  
 ```sh
-$ sudo apt install libasound2-dev
+$ sudo apt install libsdl2-dev libsdl2-mixer-dev
 ```
+
+**Windows**  
+Setup SDL2 for mingw  
+  
   
   
 ## 📌 Installing
@@ -93,34 +99,37 @@ $ sudo apt install libasound2-dev
 
 
 # 🎧 Usage
-Start audio service.  
+Start audio service  
 ```sh
-$ ./audigo
+$ ./audigo-sdl
 ```
 
 ## 🔨 Options
 
 ### port
-add port number. default port 80
+add port number (default port 80)  
 
-    ```sh
-    Listening port 5701
-    $ audigo 5701
+```sh
+Listening port 5701
+$ ./audigo-adl 5701
 
-    Listening port 8080
-    $ audigo 8080
+Listening port 8080
+$ ./audigo-adl 8080
 
-    Listening port 80
-    $ audigo
-    ```
+Listening port 80
+$ ./audigo-adl
+```
 
 ## 📖 help
-```sh
+
+```sh  
+$ ./audigo-sdl -h
+
 NAME:
-   audigo - Audio service by LED CUBU
+   audigo-sdl - Audio service by LED CUBU
 
 USAGE:
-   audigo.exe [global options] command [command options] [arguments...]
+   audigo-sdl.exe [global options] command [command options] [arguments...]
 
 VERSION:
    1.0.0
@@ -132,18 +141,30 @@ COMMANDS:
      help, h    Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --cd value     change current directory by repl
-   --help, -h     show help
-   --version, -v  print the version
-
-client OPTIONS:
-   --cd value                change current directory by repl
-   --domain value, -d value  set request domain url by client (default: "http://audigo.local")
+   --cd value, -c value  change current directory by repl
+   --help, -h            show help
+   --version, -v         print the version
 ```
+
+Client mode help
+```sh
+$ ./audigo-sdl c -h
+
+NAME:
+   audigo-sdl.exe client - Instant client REPL mode.
+
+USAGE:
+   audigo-sdl.exe client [command options] [arguments...]
+
+OPTIONS:
+   --cd value, -c value      change current directory by repl
+   --domain value, -d value  set request domain url by client (default: "http://audigo.local")
+```  
+
 
 ## 📂 Directory layout
 
-Add sound file in audigo/asset/audio
+Add sound file in audigo-adl/asset/audio
 
 ```sh
 audigo
@@ -151,23 +172,25 @@ audigo
  |-- asset
       |-- audio
            |-- bgm_wave.wav
-           |-- hogehoge.mp3
+           |-- hogehoge.wav
            |-- foobar.wav
            |-- ...
 
 ```
-
-
+  
+Support sound file format  
+* wave
+* sample rate: 44100
+  
+  
 # 🌏️ REST Api
 | REST | URI                             | note                          | arguments (json)     |
 |------|---------------------------------|-------------------------------|----------------------|
 | GET  | /audio/v1/ping                  | I Can Fly !                   | none                 |
 | POST | /audio/v1/init/\<content id>    | init players in memory        | none                 |
-| POST | /audio/v1/play/\<content id>    | play sound                    | src: "bgm_wave.wav"<br> (file name in ./asset/audio/) <br><br>loop: true or false<br> (loop play or single play) <br><br>stop: true or false<br> (start and pause or normal play)        |
+| POST | /audio/v1/play/\<content id>    | play sound                    | src: "bgm_wave.wav"<br> (file name in ./asset/audio/) <br><br>loop: true or false<br> (loop play or single play) <br>        |
 | POST | /audio/v1/stop/\<content id>    | stop content player sound     | none                 |
-| POST | /audio/v1/pause/\<content id>   | pause content player sound    | none                 |
-| POST | /audio/v1/resume/\<content id>  | resume content player sound   | none                 |
-| POST | /audio/v1/volume/\<content id>  | change volume                 | vol: 2 (0 - n, 0 is silent)          |
+| POST | /audio/v1/volume/\<content id>  | change volume                 | vol: 0.5 (0 - 1, 0 is silent)          |
 
 
 # 🎃 Notes
@@ -176,7 +199,7 @@ audigo
 |--------------------------------|-----|--------|
 | Windows (7, 10 or Later)       | -   | ✓     |
 | Rasbian (STRETCH or Later)     | ✓  | -      |
-| OSX (10.14 or Later)           | -   | ✓     |
+| OSX (10.14 or Later)           | -   | -     |
 
 
 # 🎤 THIRD PARTY
