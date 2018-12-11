@@ -23,15 +23,6 @@ func Repl() {
 		player: player.NewProxy(),
 	}
 	c.printInit()
-
-	// pipeline
-	// if terminal.IsTerminal(0) {
-	// 	src, _ := ioutil.ReadAll(os.Stdin)
-	// 	c.play(string(src))
-	// 	return
-	// }
-
-	// wait input
 	c.cli()
 }
 
@@ -55,14 +46,6 @@ func (c *playerRepl) play(src string) {
 
 func (c *playerRepl) stop() {
 	c.sendChan(&player.Action{Act: player.Stop})
-}
-
-func (c *playerRepl) pause() {
-	c.sendChan(&player.Action{Act: player.Pause})
-}
-
-func (c *playerRepl) resume() {
-	c.sendChan(&player.Action{Act: player.Resume})
 }
 
 func (c *playerRepl) volume(a string) {
@@ -89,10 +72,6 @@ func (c *playerRepl) cli() {
 			c.play(inputs[1])
 		case "stop":
 			c.stop()
-		case "pause":
-			c.pause()
-		case "resume":
-			c.resume()
 		case "volume":
 			c.volume(inputs[1])
 		case "exit":
@@ -113,8 +92,6 @@ func (c *playerRepl) help() {
 	fmt.Print(`
         play <file name>    play sound file
         stop                stop music
-        pause               pause music
-        resume              resume music
         volume <new vol>    change volume (float)
 
 		help                this is it

@@ -23,12 +23,6 @@ func TestChan(t *testing.T) {
 	act.Args = &VolumeArgs{1}
 	c <- act
 
-	act.Act = Pause
-	c <- act
-
-	act.Act = Resume
-	c <- act
-
 	act.Act = Stop
 	c <- act
 }

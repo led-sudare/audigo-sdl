@@ -2,7 +2,6 @@ package net
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -34,13 +33,10 @@ func setV1(r *gin.Engine) {
 	v1 := r.Group("audio/v1")
 	{
 		v1.GET("/ping", func(c *gin.Context) { c.String(200, "pong") })
-		v1.GET("/players", handle.ids)
 		v1.POST("/init/:content_id", handle.create)
 		v1.POST("/play/:content_id", handle.play)
 		v1.POST("/stop/:content_id", handle.stop)
 		v1.POST("/volume/:content_id", handle.volume)
-		v1.POST("/pause/:content_id", handle.pause)
-		v1.POST("/resume/:content_id", handle.resume)
 	}
 }
 
@@ -71,21 +67,6 @@ func (h *handler) getPlayer(id string, create bool) (player.Proxy, error) {
 		}
 	}
 	return p, nil
-}
-
-func (h *handler) ids(c *gin.Context) {
-	code := http.StatusBadRequest
-	keys := make([]string, len(h.players))
-	for k := range h.players {
-		keys = append(keys, k)
-	}
-	res, err := json.Marshal(keys)
-	if err != nil {
-		code = http.StatusInternalServerError
-		c.JSON(code, err)
-		return
-	}
-	c.JSON(code, res)
 }
 
 func (h *handler) play(c *gin.Context) {
@@ -148,38 +129,6 @@ func (h *handler) volume(c *gin.Context) {
 	// send
 	select {
 	case p.GetChannel() <- &player.Action{Act: player.Volume, Args: &args}:
-		break
-	default:
-		log.Error("dont send player chan: stop")
-	}
-	c.JSON(code, nil)
-}
-
-func (h *handler) pause(c *gin.Context) {
-	log.Info("call pause rest-api audio module.\n", c.Request.Header)
-	code := http.StatusAccepted
-	p, err := h.getPlayer(c.Param("content_id"), true)
-	if err != nil {
-		return
-	}
-	select {
-	case p.GetChannel() <- &player.Action{Act: player.Pause, Args: struct{}{}}:
-		break
-	default:
-		log.Error("dont send player chan: stop")
-	}
-	c.JSON(code, nil)
-}
-
-func (h *handler) resume(c *gin.Context) {
-	log.Info("call resume rest-api audio module.\n", c.Request.Header)
-	code := http.StatusAccepted
-	p, err := h.getPlayer(c.Param("content_id"), true)
-	if err != nil {
-		return
-	}
-	select {
-	case p.GetChannel() <- &player.Action{Act: player.Resume, Args: struct{}{}}:
 		break
 	default:
 		log.Error("dont send player chan: stop")

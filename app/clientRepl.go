@@ -21,15 +21,6 @@ func ClientRepl(domain string, id string) {
 		c: NewClient(domain, id),
 	}
 	c.printInit()
-
-	// // pipeline
-	// if terminal.IsTerminal(0) {
-	// 	src, _ := ioutil.ReadAll(os.Stdin)
-	// 	c.play(string(src))
-	// 	return
-	// }
-
-	// wait input
 	c.cli()
 }
 
@@ -41,14 +32,6 @@ func (r *clientRepl) play(src string) {
 
 func (r *clientRepl) stop() {
 	r.c.Stop()
-}
-
-func (r *clientRepl) pause() {
-	r.c.Pause()
-}
-
-func (r *clientRepl) resume() {
-	r.c.Resume()
 }
 
 func (r *clientRepl) volume(a string) {
@@ -89,10 +72,6 @@ func (r *clientRepl) cli() {
 			r.play(inputs[1])
 		case "stop":
 			r.stop()
-		case "pause":
-			r.pause()
-		case "resume":
-			r.resume()
 		case "volume":
 			r.volume(inputs[1])
 		case "exit":
@@ -115,8 +94,6 @@ func (r *clientRepl) help() {
 	fmt.Print(`
         play <file name>    play sound file
         stop                stop music
-        pause               pause music
-        resume              resume music
         volume <new vol>    change volume (float)
 
         list                show sound files

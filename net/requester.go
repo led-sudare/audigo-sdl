@@ -27,16 +27,7 @@ type Requester struct {
 
 	httpQueue  chan interface{}
 	httpClient *http.Client
-	// requestPool *audigoPool
 }
-
-// type audigoPool struct {
-// 	playPool   *sync.Pool
-// 	stopPool   *sync.Pool
-// 	pausePool  *sync.Pool
-// 	resumePool *sync.Pool
-// 	volumePool *sync.Pool
-// }
 
 func NewRequester(domain string, id string) *Requester {
 	r := &Requester{
@@ -45,7 +36,6 @@ func NewRequester(domain string, id string) *Requester {
 		httpClient: &http.Client{},
 		httpQueue:  make(chan interface{}, HTTPQUEUE_SIZE),
 	}
-	// r.initPool()
 
 	go r.work()
 	return r
@@ -73,8 +63,6 @@ func (r *Requester) work() {
 }
 
 func (r *Requester) request(v *Action) {
-	// req := r.getRequest(v.Act)
-
 	json, err := json.Marshal(v.Args)
 	if err != nil {
 		log.Errorf("dont marshal args: %s\n%s", v.Args, err.Error())
@@ -89,53 +77,6 @@ func (r *Requester) request(v *Action) {
 	res, _ := r.httpClient.Do(req)
 	printResponse(res)
 }
-
-// func (r *Requester) getRequest(act string) *http.Request {
-// 	var f interface{}
-// 	switch strings.ToLower(act) {
-// 	case "play":
-// 		f = r.requestPool.playPool.Get()
-// 	case "stop":
-// 		f = r.requestPool.stopPool.Get()
-// 	case "pause":
-// 		f = r.requestPool.pausePool.Get()
-// 	case "resume":
-// 		f = r.requestPool.resumePool.Get()
-// 	case "volume":
-// 		f = r.requestPool.volumePool.Get()
-// 	default:
-// 		return nil
-// 	}
-// 	return f.(*http.Request)
-// }
-
-// func (r *Requester) initPool() {
-// 	r.requestPool = &audigoPool{}
-// 	r.requestPool.playPool = &sync.Pool{
-// 		New: r.getCreationPoolFunc("play"),
-// 	}
-// 	r.requestPool.stopPool = &sync.Pool{
-// 		New: r.getCreationPoolFunc("stop"),
-// 	}
-// 	r.requestPool.pausePool = &sync.Pool{
-// 		New: r.getCreationPoolFunc("pause"),
-// 	}
-// 	r.requestPool.resumePool = &sync.Pool{
-// 		New: r.getCreationPoolFunc("resume"),
-// 	}
-// 	r.requestPool.volumePool = &sync.Pool{
-// 		New: r.getCreationPoolFunc("volume"),
-// 	}
-// }
-
-// func (r *Requester) getCreationPoolFunc(act string) func() interface{} {
-// 	return func() interface{} {
-// 		url := createUrl(act)
-// 		log.Debugf("*** %s", url)
-// 		r := newRequest(url, nil)
-// 		return r
-// 	}
-// }
 
 func (r *Requester) createUrl(act string) string {
 	uri, _ := url.Parse(r.domain)

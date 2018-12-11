@@ -9,8 +9,6 @@ type Client interface {
 	Play(args *player.PlayArgs)
 	Volume(args *player.VolumeArgs)
 	Stop()
-	Pause()
-	Resume()
 }
 
 type simpleClient struct {
@@ -47,20 +45,6 @@ func (c *simpleClient) Volume(args *player.VolumeArgs) {
 func (c *simpleClient) Stop() {
 	c.r.GetQueue() <- &net.Action{
 		Act:  "stop",
-		Args: nil,
-	}
-}
-
-func (c *simpleClient) Pause() {
-	c.r.GetQueue() <- &net.Action{
-		Act:  "pause",
-		Args: nil,
-	}
-}
-
-func (c *simpleClient) Resume() {
-	c.r.GetQueue() <- &net.Action{
-		Act:  "resume",
 		Args: nil,
 	}
 }
