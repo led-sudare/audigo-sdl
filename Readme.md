@@ -1,18 +1,51 @@
-﻿# audigo
+﻿audigo-sdl
+===
 3D Led CubeのPCレス(Raspberry pi)音響サービス(SDL版)  
 
 <!-- toc -->  
-* [💊 Requirements](#-requirements)
-* [📌 Installing](#-installing)
+* [🐳 Docker]($-docker)
+* [📌 Local build & Run](#-local-build-&-run)
 * [🎧 Usage](#-usage)
 * [🌏 REST Api](#️-rest-api)
 * [🎃 Notes](#-notes)
 * [🎤 Third party](#-third-party)
 <!-- tocstop -->  
 
-# Getting Started
-## 💊 Requirements
+# Docker
+## Require👜
+* Git
+* Docker
 
+## Get Started🏁
+
+1. Get src
+    ```sh
+    $ git clone https://github.com/led-sudare/audigo-sdl.git
+    ```
+
+2. Build
+    ```sh
+    $ docker image build -t audigo-sdl:alpine --build-arg port=80 --no-cache .
+
+    $ docker image ls
+    REPOSITORY          TAG                  IMAGE ID            CREATED             SIZE
+    audigo-sdl          alpine               81fc7f6e7c66        25 minutes ago      75MB
+    ```
+
+    Change ip:port
+    ```sh
+    $ docker image build -t mori:alpine --build-arg ip=1.2.3.4 --build-arg port=5678 .
+    $ docker image prune
+    ```
+
+3. Run
+    ```sh
+    $ docker container run -d --rm --device=/dev/snd:/dev/snd --name audigo audigo-sdl:alpine
+    ```
+
+
+# Local build & Run
+## Require👜
 **ALL**  
 * git  
 * use modules 
@@ -32,8 +65,7 @@ $ sudo apt install libsdl2-dev libsdl2-mixer-dev
 Setup SDL2 for mingw  
   
   
-  
-## 📌 Installing
+## Installing📌
 
 1. Goto GOPATH  
     **Windows**
