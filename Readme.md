@@ -15,11 +15,11 @@
 
 **ALL**  
 * git  
-* dep 
+* use modules 
     ```sh
-    $ go get -u github.com/golang/dep/cmd/dep
+    $ export GO111MODULE=on
     ```
-* Go 1.11 or later  
+* Go 1.12 or later  
 
 see https://github.com/veandco/go-sdl2  
   
@@ -36,7 +36,7 @@ Setup SDL2 for mingw
 ## 📌 Installing
 
 1. Goto GOPATH  
-    **WIndows**
+    **Windows**
     ```sh
     $ cd %GOPATH%
     ```
@@ -52,7 +52,6 @@ Setup SDL2 for mingw
     ```sh
     $ git clone https://github.com/code560/audigo-sdl.git ./src/github.com/code560/audigo-sdl
     $ cd ./src/github.com/code560/audigo-sdl
-    $ dep ensure
     ```
 
 3. Build
