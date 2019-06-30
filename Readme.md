@@ -3,8 +3,8 @@
 3D Led CubeのPCレス(Raspberry pi)音響サービス(SDL版)  
 
 <!-- toc -->  
-* [🐳 Docker]($-docker)
-* [📌 Local build & Run](#-local-build-&-run)
+* [🐳 Docker](#-docker)
+* [📌 Local build & Run](#-local-build--run)
 * [🎧 Usage](#-usage)
 * [🌏 REST Api](#️-rest-api)
 * [🎃 Notes](#-notes)
